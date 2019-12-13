@@ -3,6 +3,6 @@
 A repository which hosts my learning projects/exercises. 
 
 ## Exercise Projects
-**blog**
+**blog**<br/>
 An exerise project associated with the ruby on rails getting started documentation
 
