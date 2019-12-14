@@ -11,13 +11,21 @@ class ArticlesController < ApplicationController
   end
 
   def new
+    @article = Article.new
   end
 
   def create
     @article = Article.new(article_params)
     
-    @article.save
-    redirect_to @article
+    # Validating that article.save return results
+    # Returns false if the it doesnt meet model requirements
+    if @article.save
+      redirect_to @article
+    else
+      # @article object is passed back to the new template
+      # Since the article failed validation (lossless error)
+      render 'new'
+    end
   end
 
   private
