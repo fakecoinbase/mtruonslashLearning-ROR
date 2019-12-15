@@ -1,6 +1,8 @@
 class ArticlesController < ApplicationController
   # Hierarchy: index, show, new, edit, create, update, and destroy
   
+  http_basic_authenticate_with name: "mtruon02", password: "password", except: [:index, :show]
+
   def index
     @articles = Article.all
   end
