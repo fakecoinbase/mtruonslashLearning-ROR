@@ -1,34 +1,25 @@
-require 'HTTParty'
-require 'Nokogiri'
+require 'nokogiri'
+require 'open-uri'
+
+$laptop_uri = 'https://www.amazon.ca/AmazonBasics-DSN-01750-SL-Laptop-Stand-Silver/dp/B00WRDS0AU/ref=sr_1_9?keywords=laptop+stand&qid=1576514518&sr=8-9'
 
 class Scraper
   
-  attr_accessor :parse_page
+  attr_accessor :doc
 
   def initialize
     # Static page for exercise
-    response = HTTParty.get("https://www.amazon.ca/s?k=laptop+stand&ref=nb_sb_noss_2")
+    doc = Nokogiri::HTML(open('https://www.amazon.ca/AmazonBasics-DSN-01750-SL-Laptop-Stand-Silver/dp/B00WRDS0AU/ref=sr_1_9?keywords=laptop+stand&qid=1576514518&sr=8-9'))
 
-    if response.body.nil? || response.body.empty?
-      # Creating an instance variable of the Nokogiri HTML data object
-      @parse_page = Nokogiri::HTML(response.code)
-      puts response.body
-    else
-      puts "Bad"
-      @parse_page = Nokogiri::HTML(response.body)
-    end
+    self.get_price_wholes
   end
 
   def get_price_wholes
-    price_wholes = parse_page.css(".a-price").css(".a-price-whole").children.map { |price_whole| price_whole.text }.compact
+    doc.css(".priceBlockBuyingPriceString").each do |price|
+      puts price.content
+    end
   end
 end
 
 scraper = Scraper.new
-price_wholes = scraper.get_price_wholes
-(0...price_wholes.size).each do |index|
-  puts "- - - index: #{index + 1} - - -"
-  puts "Price Whole = $#{price_wholes[index]}"
-end
-
 puts "testing?"
