@@ -30,6 +30,7 @@ class Scraper
     end
 end
 
+# Running the scraper for tests
 url = "http://forums.redflagdeals.com/hot-deals-f9/"
 scraper = Scraper.new(url)
 titles = scraper.search_hot_threads
