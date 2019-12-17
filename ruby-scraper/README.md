@@ -7,4 +7,4 @@ Afterwards, parsing it and outputting the data.
 Dependencies
 ------------
 * Nokogiri
-* HTTParty
+* Open-uri

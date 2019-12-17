@@ -6,26 +6,30 @@ class Scraper
   
   attr_accessor :doc
 
-  def initialize
+  def initialize(url)
     # Static page for exercise
-    @url = "http://forums.redflagdeals.com/hot-deals-f9/"
-    @html = open(@url)
-    @doc = Nokogiri::HTML(open(@html))
+    html = open(url)
+    @doc = Nokogiri::HTML(open(html))
+    puts "Searching: #{url}"
   end
 
   def search_hot_threads
-    thread_table.each do |item|
-      score = item.css('dl').css('.post_voting').attribute('data-total')
-      title = item.css('a').css('.topic_title_link').text
-      puts score, title
+    threads.each do |thread|
+      score = thread.css('dl').css('.post_voting').attribute('data-total')
+      if score.nil?
+        score = "NONE"
+      end
+      title = thread.css('a').css('.topic_title_link').text
+      puts "Score: #{ score }" + ", " + "#{ title.strip }"
     end
   end
 
   private
-    def thread_table
+    def threads
       @doc.css('.inner').css('.thread_info_title')
     end
 end
 
-scraper = Scraper.new
+url = "http://forums.redflagdeals.com/hot-deals-f9/"
+scraper = Scraper.new(url)
 titles = scraper.search_hot_threads
