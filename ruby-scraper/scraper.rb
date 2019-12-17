@@ -14,6 +14,7 @@ class Scraper
   end
 
   def search_hot_threads
+    results = []
     threads.each do |thread|
       score = thread.css('dl').css('.post_voting').attribute('data-total')
       if score.nil?
@@ -21,7 +22,9 @@ class Scraper
       end
       title = thread.css('a').css('.topic_title_link').text
       puts "Score: #{ score }" + ", " + "#{ title.strip }"
+      results << [title, score]
     end
+    return results
   end
 
   private
@@ -33,4 +36,6 @@ end
 # Running the scraper for tests
 url = "http://forums.redflagdeals.com/hot-deals-f9/"
 scraper = Scraper.new(url)
-titles = scraper.search_hot_threads
+res = scraper.search_hot_threads
+puts "\n\n"
+puts res
