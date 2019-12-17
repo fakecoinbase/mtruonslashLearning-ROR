@@ -1,7 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
 
-$laptop_uri = 'https://www.amazon.ca/AmazonBasics-DSN-01750-SL-Laptop-Stand-Silver/dp/B00WRDS0AU/ref=sr_1_9?keywords=laptop+stand&qid=1576514518&sr=8-9'
 
 class Scraper
   
@@ -9,17 +8,24 @@ class Scraper
 
   def initialize
     # Static page for exercise
-    doc = Nokogiri::HTML(open('https://www.amazon.ca/AmazonBasics-DSN-01750-SL-Laptop-Stand-Silver/dp/B00WRDS0AU/ref=sr_1_9?keywords=laptop+stand&qid=1576514518&sr=8-9'))
-
-    self.get_price_wholes
+    @url = "http://forums.redflagdeals.com/hot-deals-f9/"
+    @html = open(@url)
+    @doc = Nokogiri::HTML(open(@html))
   end
 
-  def get_price_wholes
-    doc.css(".priceBlockBuyingPriceString").each do |price|
-      puts price.content
+  def search_hot_threads
+    thread_table.each do |item|
+      score = item.css('dl').css('.post_voting').attribute('data-total')
+      title = item.css('a').css('.topic_title_link').text
+      puts score, title
     end
   end
+
+  private
+    def thread_table
+      @doc.css('.inner').css('.thread_info_title')
+    end
 end
 
 scraper = Scraper.new
-puts "testing?"
+titles = scraper.search_hot_threads
