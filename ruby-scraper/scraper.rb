@@ -50,7 +50,7 @@ end
 # Running the scraper for tests
 url = "http://forums.redflagdeals.com/hot-deals-f9/"
 scraper = RFDScraper.new(url)
-res = scraper.search_hot_threads
+res = scraper.scrape
 res.each do |thread|
   puts "#{thread[1]}, #{thread[0]}"
 end
