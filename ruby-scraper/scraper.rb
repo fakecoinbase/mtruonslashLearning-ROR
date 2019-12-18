@@ -16,13 +16,15 @@ class Scraper
   def search_hot_threads
     results = []
     threads.each do |thread|
-      score = thread.css('dl').css('.post_voting').attribute('data-total')
-      if score.nil?
-        score = "NONE"
+      scoreHTML = thread.css('dl').css('.post_voting').attribute('data-total')
+      titleHTML = thread.css('a').css('.topic_title_link').text
+      score = 0
+      if !scoreHTML.nil?    
+        multiplier = (scoreHTML.value[0,1] == '-') ? -1 : 1
+        length = scoreHTML.value.length
+        score = scoreHTML.value[1,length].to_i * multiplier
       end
-      title = thread.css('a').css('.topic_title_link').text
-      puts "Score: #{ score }" + ", " + "#{ title.strip }"
-      results << [title, score]
+      results << [titleHTML.strip, score]
     end
     return results
   end
@@ -37,5 +39,6 @@ end
 url = "http://forums.redflagdeals.com/hot-deals-f9/"
 scraper = Scraper.new(url)
 res = scraper.search_hot_threads
-puts "\n\n"
-puts res
+res.each do |thread|
+  puts "#{thread[1]}, #{thread[0]}"
+end
