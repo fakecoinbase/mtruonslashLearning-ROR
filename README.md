@@ -14,3 +14,6 @@ Exercise Projects
 ### blog
 An exerise project associated with the ruby on rails getting started documentation
 
+### Scraper
+A webpage scraper in ruby which uses the nokogiri and open-uri gem. This scraper service is to be used to drive publishing to a kafka topic/async queue
+
