@@ -15,7 +15,7 @@ class RFDScraper
   def initialize(url)
     # Static page for exercise
     html = open(url)
-    @doc = Nokogiri::HTML(open(html))
+    @doc = Nokogiri::HTML(html)
     puts "Searching: #{url}"
   end
 

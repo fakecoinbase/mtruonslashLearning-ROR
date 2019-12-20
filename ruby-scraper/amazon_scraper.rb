@@ -16,14 +16,13 @@ class AmazonScraper
   def initialize(url)
     # Static page for exercise
     begin
-      html = open(url)
+      html = open(url, "User-Agent" => @user_agent)
     rescue OpenURI::HTTPError => error
       response = error.io
       puts "Received: #{response.status}, failed to proceed with opening the URL"
       return response
     end
-    @doc = Nokogiri::HTML(open(html,
-                              "User-Agent" => @user_agent))
+    @doc = Nokogiri::HTML(html)
     puts "Searching: #{url}"
   end
 
