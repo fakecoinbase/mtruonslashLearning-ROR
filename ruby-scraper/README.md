@@ -1,8 +1,8 @@
 Ruby Scraper
 ============
 
-A ruby script/scraper which takes the redflagdeal's hot threads subforums  and scrapes the page for data.
-Afterwards, parsing it and outputting the data.
+A ruby scraper module (interface) and implementation for a redflagdeal's hot threads subforums data scraper.
+The scraper parses HTML to extract target data and output it in a desirable form factor.
 
 Challenges
 -----------
