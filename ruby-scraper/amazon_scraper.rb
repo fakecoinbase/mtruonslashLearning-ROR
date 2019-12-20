@@ -16,7 +16,7 @@ class AmazonScraper
   def initialize(url)
     # Static page for exercise
     begin
-      html = open(url, "User-Agent" => @user_agent)
+      html = open(url, "User-Agent" => @@user_agent)
     rescue OpenURI::HTTPError => error
       response = error.io
       puts "Received: #{response.status}, failed to proceed with opening the URL"
@@ -28,10 +28,9 @@ class AmazonScraper
 
   def scrape
     results = []
-
     # Traverses each thread_info_title HTML
     threads.each do |thread|
-      puts thread
+      puts thread.text
     end
    
     # Return populated tuple list (thread_title, vote_score)  
@@ -40,15 +39,11 @@ class AmazonScraper
 
   private
     def threads
-      @doc.css('.priceblock_ourprice')
+      @doc.css('div#price').css('span#priceblock_ourprice')
     end
 end
 
 # Running the scraper for tests
 product_url = "https://www.amazon.ca/gp/product/B00WRDS0AU?pf_rd_p=05326fd5-c43e-4948-99b1-a65b129fdd73&pf_rd_r=ECHQYPX9MEJ7JD9TC7VE"
 scraper = AmazonScraper.new(product_url)
-if scraper.nil?
-  res = scraper.scrape
-else
-  puts "Scraper failed to initialize -- Ending script"
-end
+scraper.scrape
