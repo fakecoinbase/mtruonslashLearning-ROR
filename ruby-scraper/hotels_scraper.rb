@@ -44,6 +44,6 @@ class HotelsScraper
 end
 
 # Running the scraper for tests
-product_url = "https://ca.hotels.com/ho378494/?q-check-out=2020-06-08&FPQ=2&q-check-in=2020-05-29&WOE=1&WOD=5&q-room-0-children=0&pa=1&tab=description&JHR=7&q-room-0-adults=2&YGF=14&MGT=7&ZSX=1&SYE=3"
+product_url = "https://ca.hotels.com/ho355849/?q-check-out=2020-06-03&tab=description&q-room-0-adults=2&YGF=14&q-check-in=2020-06-01&MGT=2&WOE=3&WOD=1&ZSX=1&SYE=3&q-room-0-children=0"
 scraper = HotelsScraper.new(product_url)
 scraper.scrape

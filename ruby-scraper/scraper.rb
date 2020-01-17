@@ -8,13 +8,17 @@ module HTMLScraper
   User_Agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
 
   def HTMLScraper.scrape(prices)
-    results = []
-    p prices.first.text
-    prices.each do |price|
-      results << price.text
-    end
+    #results = []
+    #prices.each do |price|
+    #  results << price.text
+    #end
 
-    return results
+    if prices.first.nil?
+      return nil
+    else
+      # Applies a regular expression for a price format dd.dd and converts it to a float 
+      return prices.first.text[/\d+(\.)*\d+/].to_f
+    end
   end
 
   class Scraper
