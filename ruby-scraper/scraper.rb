@@ -19,12 +19,15 @@ module HTMLScraper
   class Scraper
     include HTMLScraper
 
-    attr_accessor :doc
-    attr_accessor :url
 
     def initialize(url)
-      @url = url
-      
+      self.url = url
+    end
+
+    attr_reader :url
+    def url=(str)
+      @url = str
+      # Opening a new document for scraping
       begin
         html = open(url, {"User-Agent" => HTMLScraper::User_Agent})
       rescue OpenURI::HTTPError => error
@@ -33,6 +36,10 @@ module HTMLScraper
         return response
       end
       @doc = Nokogiri::HTML(html)
+    end
+
+    def doc=(html)
+      @doc = html
     end
   end
 
@@ -62,6 +69,19 @@ module HTMLScraper
 end
 
 # Testing
+
+# Initializing Scraper
 product_url = "https://ca.hotels.com/ho355849/?q-check-out=2020-06-03&tab=description&q-room-0-adults=2&YGF=14&q-check-in=2020-06-01&MGT=2&WOE=3&WOD=1&ZSX=1&SYE=3&q-room-0-children=0"
 scraper = HTMLScraper::HotelsScraper.new(product_url)
+
+# Outputting original content
+p "Scraping hotel 1"
+p "URL: #{scraper.url}"
+p scraper.scrape_price
+
+# Changing scraper url and updating doc
+
+p "Scraping hotel 2"
+scraper.url = "https://ca.hotels.com/ho116523/?intlid=TP+Hotel+2+Homepage+%3A%3A+TP+Properties&q-check-in=2020-06-01&q-check-out=2020-06-03&q-room-0-adults=2&q-room-0-children=0&q-rooms=1"
+p "URL: #{scraper.url}"
 p scraper.scrape_price
