@@ -38,7 +38,7 @@ module HTMLScraper
 
   # Amazon HTML Price Scraper class
   class AmazonScraper < Scraper
-    def scrape
+    def scrape_price
       HTMLScraper.scape(prices)
     end
 
@@ -50,7 +50,7 @@ module HTMLScraper
 
   # Hotels.com HTML Price Scraper class
   class HotelsScraper < Scraper
-    def scrape
+    def scrape_price
       HTMLScraper.scrape(prices)
     end
     
@@ -64,4 +64,4 @@ end
 # Testing
 product_url = "https://ca.hotels.com/ho355849/?q-check-out=2020-06-03&tab=description&q-room-0-adults=2&YGF=14&q-check-in=2020-06-01&MGT=2&WOE=3&WOD=1&ZSX=1&SYE=3&q-room-0-children=0"
 scraper = HTMLScraper::HotelsScraper.new(product_url)
-p scraper.scrape
+p scraper.scrape_price
