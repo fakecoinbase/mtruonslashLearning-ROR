@@ -1,56 +1,68 @@
 require 'nokogiri'
 require 'open-uri'
 
-module Scraper
-  def scrape
-    raise "Not implemented"
-  end
-end
+module HTMLScraper
+  include OpenURI
+  include Nokogiri
 
-class RFDScraper
-  include Scraper
+  User_Agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
 
-  attr_accessor :doc
-
-  def initialize(url)
-    # Static page for exercise
-    html = open(url)
-    @doc = Nokogiri::HTML(html)
-    puts "Searching: #{url}"
-  end
-
-  def scrape
+  def HTMLScraper.scrape(prices)
     results = []
-
-    # Traverses each thread_info_title HTML
-    threads.each do |thread|
-      score = 0
-      scoreHTML = thread.css('dl').css('.post_voting').attribute('data-total')
-      titleHTML = thread.css('a').css('.topic_title_link').text
-
-      if !scoreHTML.nil?    
-        multiplier = (scoreHTML.value[0,1] == '-') ? -1 : 1
-        length = scoreHTML.value.length
-        score = scoreHTML.value[1,length].to_i * multiplier
-      end
-
-      results << [titleHTML.strip, score]
+    p prices.first.text
+    prices.each do |price|
+      results << price.text
     end
-   
-    # Return populated tuple list (thread_title, vote_score)  
+
     return results
   end
 
-  private
-    def threads
-      @doc.css('.inner').css('.thread_info_title')
+  class Scraper
+    include HTMLScraper
+
+    attr_accessor :doc
+    attr_accessor :url
+
+    def initialize(url)
+      @url = url
+      
+      begin
+        html = open(url, {"User-Agent" => HTMLScraper::User_Agent})
+      rescue OpenURI::HTTPError => error
+        response = error.io
+        puts "Received #{response.status}. Failed to proceed with provided URL"
+        return response
+      end
+      @doc = Nokogiri::HTML(html)
     end
+  end
+
+  # Amazon HTML Price Scraper class
+  class AmazonScraper < Scraper
+    def scrape
+      HTMLScraper.scape(prices)
+    end
+
+    private
+      def prices
+        @doc.css('div#price').css('span#priceblock_ourprice')
+      end
+  end
+
+  # Hotels.com HTML Price Scraper class
+  class HotelsScraper < Scraper
+    def scrape
+      HTMLScraper.scrape(prices)
+    end
+    
+    private
+      def prices
+        @doc.css('div#book-info-container').css('.current-price')
+      end
+  end
 end
 
-# Running the scraper for tests
-url = "http://forums.redflagdeals.com/hot-deals-f9/"
-scraper = RFDScraper.new(url)
-res = scraper.scrape
-res.each do |thread|
-  puts "#{thread[1]}, #{thread[0]}"
-end
+# Testing
+product_url = "https://ca.hotels.com/ho355849/?q-check-out=2020-06-03&tab=description&q-room-0-adults=2&YGF=14&q-check-in=2020-06-01&MGT=2&WOE=3&WOD=1&ZSX=1&SYE=3&q-room-0-children=0"
+scraper = HTMLScraper::HotelsScraper.new(product_url)
+p scraper.scrape
