@@ -18,13 +18,13 @@ module HTMLScraper
 
   class Scraper
     include HTMLScraper
-
+    
+    attr_reader :url
 
     def initialize(url)
       self.url = url
     end
 
-    attr_reader :url
     def url=(str)
       @url = str
       # Opening a new document for scraping
