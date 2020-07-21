@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+# Easier way to make HTTP requests
+gem 'httparty'
+
+# Runtime terminal
+gem 'pry', '~> 0.12.2'
